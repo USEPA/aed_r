@@ -1,30 +1,32 @@
-"Name","Interest"
-"Nate Merrill","Study Group"
-"Ingrid Heilke","Workshop"
-"Troy Hill","Study Group"
-"Theresa Johnston","Workshop and Study Group"
-"Sarina Lyon","Workshop and Study Group"
-"Jim Latimer","Workshop and Study Group"
-"Brenda Rashleigh","Study Group"
-"Stephen Balogh","Workshop and Study Group"
-"Darryl Keith","Workshop"
-"Nicole Gutierrez","Study Group"
-"Mary Schoell","Workshop"
-"Stephanie Figary","Workshop and Study Group"
-"Abbey Joyce","Workshop"
-"Sandi Robinson","Workshop"
-"Melissa Hughes","Workshop and Study Group"
-"Charleve Carey","Workshop and Study Group"
-"Bushra Khan","Workshop"
-"Dan Campbell","Workshop"
-"Peg Pelletier","Study Group"
-"Ed Dettmann","Workshop and Study Group"
-"Justin Bousquin","Study Group"
-"Bryan Clark","Study Group"
-"Emily Santos","Workshop and Study Group"
-"Rose Martin","Workshop"
-"Anne Kuhn","Study Group"
-"Jason Grear","Study Group"
-"Naomi Detenbeck","Study Group"
-"Dodi Borsay","Workshop"
-"Warren Boothman","Workshop and Study Group"
+"Name","Interest","Unavailable","WorkshopDate"
+"Nate Merrill","Study Group",NA,NA
+"Troy Hill","Study Group",NA,NA
+"Brenda Rashleigh","Study Group",NA,NA
+"Nicole Gutierrez","Study Group",NA,NA
+"Peg Pelletier","Study Group",NA,NA
+"Justin Bousquin","Study Group",NA,NA
+"Bryan Clark","Study Group",NA,NA
+"Anne Kuhn","Study Group",NA,NA
+"Jason Grear","Study Group",NA,NA
+"Naomi Detenbeck","Study Group",NA,NA
+"Ingrid Heilke","Workshop",NA,"Wed, June 29"
+"Darryl Keith","Workshop",NA,"Tues, July 5"
+"Mary Schoell","Workshop",NA,"Wed, June 29"
+"Abbey Joyce","Workshop",NA,"Tues, July 5"
+"Sandi Robinson","Workshop",NA,"Wed, June 29"
+"Bushra Khan","Workshop",NA,"Tues, July 5"
+"Rose Martin","Workshop",NA,"Wed, June 29"
+"Dodi Borsay","Workshop",NA,"Tues, July 5"
+"Theresa Johnston","Workshop and Study Group",NA,"Wed, June 29"
+"Sarina Lyon","Workshop and Study Group",NA,"Tues, July 5"
+"Stephen Balogh","Workshop and Study Group",NA,"Wed, June 29"
+"Melissa Hughes","Workshop and Study Group",NA,"Tues, July 5"
+"Charleve Carey","Workshop and Study Group",NA,"Wed, June 29"
+"Ed Dettmann","Workshop and Study Group",NA,"Tues, July 5"
+"Dan Campbell","Workshop"," July 1 - July 8","Wed, June 29"
+"Warren Boothman","Workshop and Study Group","Friday, July 8","Tues, July 5"
+"Stephanie Figary","Workshop and Study Group","June 27 - July 1","Tues, July 5"
+"Emily Santos","Workshop and Study Group","June 28,30 and July 5,7","Wed, June 29"
+"Jim Latimer","Workshop and Study Group","June 30 - July 9","Wed, June 29",
+"Marilyn TenBrink","In the loop",NA,NA
+"Sarina Lyon","Workshop and Study Group",NA,"Wed, June 29"
