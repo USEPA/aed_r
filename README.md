@@ -8,7 +8,7 @@ Ecology Division.
  - Jeff Hollister
  
 ## Helper
- - Farnaz Nojavan (tentative)
+ - Farnaz Nojavan
 
 ## Rosters
  - [Wednesday, June 29](wed_june29_workshop.csv)
