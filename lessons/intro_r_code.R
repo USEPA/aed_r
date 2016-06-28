@@ -1,5 +1,5 @@
 ################################################################################
-# ./01_basics.R
+# lessons/01_basics.R
 ################################################################################
 ## ----function_examples---------------------------------------------------
 #Print
@@ -107,7 +107,7 @@ apropos("print") #Returns all available functions with "print" in the name
 
 
 ################################################################################
-# ./02_data.R
+# lessons/02_data.R
 ################################################################################
 ## ----na_examples, eval=FALSE---------------------------------------------
 na.omit()#na.omit - removes them
@@ -168,9 +168,9 @@ first_last
 
 ## ----create_data_frame---------------------------------------------------
 numbers <- c(1:26,NA)
-letters <- c(NA,letters) #letters is a special object available from base R
+letts <- c(NA,letters) #letters is a special object available from base R
 logical <- c(rep(TRUE,13),NA,rep(FALSE,13))
-examp_df <- data.frame(letters,numbers,logical)
+examp_df <- data.frame(letts,numbers,logical)
 
 ## ----examine_data_frame--------------------------------------------------
 #See the first 6 rows
@@ -214,7 +214,7 @@ dim(web_df)
 summary(web_df)
 
 ################################################################################
-# ./03_wrangling.R
+# lessons/03_wrangling.R
 ################################################################################
 ## ----indexing_examp------------------------------------------------------
 #Create a vector
@@ -341,7 +341,7 @@ temp_df2<-temp_df %>%
 head(temp_df2)
 
 ################################################################################
-# ./04_viz.R
+# lessons/04_viz.R
 ################################################################################
 ## ----plot_examp----------------------------------------------------------
 plot(mtcars$hp,mtcars$qsec)
