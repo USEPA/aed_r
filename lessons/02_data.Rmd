@@ -64,8 +64,16 @@ The data structures in base R include:
 
 Our efforts will focus on vectors, and data frames.  We will discuss just the basics of lists and factors. We  will leave it to your curiousity to explore the matrix and table data structures.
 
+Great table borrowed from [Hadley Wickham's Advanced R Book](http://adv-r.had.co.nz/Data-structures.html).
+
+|             | Homogeneous   | Heterogeneous |
+|-------------|---------------|---------------|
+| 1d          | Atomic vector | List          |
+| 2d          | Matrix        | Data frame    |
+| nd          | Array         | 	            |
+
 ### Vectors
-A vector is the most common and basic data structure in `R` and is pretty much the workhorse of R. 
+A vector is the most common and basic data structure in `R` and is pretty much the workhorse data structure
 
 A vector can be a vector of characters, logical, integers or numeric and all values in the vector must be of the same data type.  Specifically, these are known as atomic vectors.
 
@@ -146,9 +154,9 @@ So one way to create a data frame is from some vectors and the `data.frame()` co
 
 ```{r create_data_frame}
 numbers <- c(1:26,NA)
-letters <- c(NA,letters) #letters is a special object available from base R
+letts <- c(NA,letters) #letters is a special object available from base R
 logical <- c(rep(TRUE,13),NA,rep(FALSE,13))
-examp_df <- data.frame(letters,numbers,logical)
+examp_df <- data.frame(letts,numbers,logical)
 ```
 
 Now that we have this data frame we probably want to do something with it.  We can examine it in many ways.
