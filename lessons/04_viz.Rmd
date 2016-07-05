@@ -239,7 +239,7 @@ Let's now build some plots with `ggplot2`
 
 1. Add another section to the script to hold this code.
 
-2. Try out a simple scatterplot, boxplot, and histogram on any of the data in our `nla_data` data frame.
+2. Try out a simple scatterplot, boxplot, and histogram on any of the data in our `nla_wq_subset` data frame.
 
 2. Build a bar plot of the mean CHLA for each of the values in WSA_ECO9.
 
