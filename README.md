@@ -1,38 +1,56 @@
-# aed_r: Introduction to R Workshop
+# AED R and friends data science study group
 
-This repository contains the materials for the Introduction to R Workshops being
-held on Wednesday, June 29 and Tuesday, July 5 2016 at the US EPA Atlantic
-Ecology Division.  
+This repository contains the materials for the Atlantic Ecology Division's R 
+(and friends) data science study group.  The purpose of this group is to work 
+together to learn new skills, languages, data science practices, etc. as they 
+relate to our research in environmental science.  The primary focus will likely
+be R, but the topics we cover will by no means be limited to that and other 
+languages and tools are very much encouraged.
 
-## Instructor
- - Jeff Hollister
- 
-## Helper
- - Farnaz Nojavan
+# Meeting day and time
+We will meet the first Thursday of every month from 2-4 pm.  Location is TBD 
+depending on the turnout.
 
-## Rosters
- - [Wednesday, June 29](wed_june29_workshop.csv)
- - [Tuesday, July 5](tues_july5_workshop.csv)
- 
-## Hardware and Software 
+# GitHub and this Repository
+This repository is public and thus anyone can access the files; however, only 
+collaborators on the repository can add or edit files.  I encourage everyone to 
+[sign up for a GitHub account](https://github.com/join), they are free and you 
+will be able to take advantage of 
+[our issues](https://github.com/usepa/aed_r/issues) for discussions and you can
+be added as a collaborator on the repository.
 
-For this workshop will be using R and RStudio. We won't have much time to test 
-and troubleshoot installations so, you will need to have these installed and 
-working prior to the workshop. Work with EZ Tech to get this done.  Any 
-problems, let Jeff know. 
+## Repository structure
+In order to keep the repository neat and orderly we will impose some best 
+practices and enforce a specific structure.  These practices should follow 
+typical practices (i.e. README, LICENSE, etc.) so that if you move to 
+repositories maintained by others, at least something should look familiar.  All
+documentation should be written use markdown.  If you are unfamiliar with 
+markdown, the 
+[RStudio Markdown Basics](http://rmarkdown.rstudio.com/lesson-2.html) will 
+teach you all you need to know (and then some)!
 
-# Workshop Schedule and Links to Materials
+|Folder/File            |Description                                        |
+|-----------------------|---------------------------------------------------|
+|[meetings](meetings/)  |Contains code, data, etc for each of meeting.      |
+|[notes](notes/)        |General notes about the study group                |
+|[workshop](workshop/)  |Materials for the 1-day Intoduction to R workshop  |
+|README.md              |This document, provides basic information          |
+|LICENSE.md             |Creative Commons Zero Public Domain Dedication     |
+|CONTRIBUTING.md        |Lays out best practices and expecations for contributions|
+|CONDUCT.md             |Code of conduct - borrowed from Data Carpentry     |
 
-| Time                | Topic                                     | 
-| ------------------- | ----------------------------------------- | 
-| 8:15 AM - 8:30 AM   | Welcome, Introductions, and Logistics     |
-| 8:30 AM - 10:00 AM  | [R Basics](lessons/01_basics.md)          | 
-| 10:00 AM - 10:15 AM | *BREAK*                                   |
-| 10:15 AM - 12:00 PM | [Data in R](lessons/02_data.md)           |       
-| 12:00 PM - 1:00 PM  | *LUNCH*                                   |
-| 1:00 PM - 2:15 PM   | [Data Wrangling](lessons/03_wrangling.md) |
-| 2:15 PM - 2:30 PM   | *BREAK*                                   |
-| 2:30 PM - 4:30 PM   | [Data Viz](lessons/04_viz.md)             |
+## File naming conventions
+So that it is easier for us to find materials and keep things looking orderly, 
+we will follow these rules for naming files in the notes and meetings sections:
 
-###Note: 
-Much of the material for this workshop was (slightly) modified from <http://usepa.github.io/introR>.  Similarity between the two workshops is intentional!
+1. Only use lower case (with the exception of the files listed above).
+2. No spaces are allowed in file names.
+3. Start out the name with something descriptive followed by the date with year, 
+month, day separated by underscore.
+4. Use conventions for file extensions (e.g. .md for markdown, .R for R script, 
+.py for python etc.)
+
+# Questions
+Any questions about the group or this repository feel free to contact @jhollist 
+directly, or submit an issue on the repo!
+
