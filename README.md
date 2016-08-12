@@ -48,7 +48,9 @@ we will follow these rules for naming files in the notes and meetings sections:
 3. Start out the name with something descriptive followed by the date with year, 
 month, day separated by underscore.
 4. Use conventions for file extensions (e.g. .md for markdown, .R for R script, 
-.py for python etc.)
+.py for python etc.).  
+
+For example, `gganimate_example_2016_08_11.R` would be a good file name.
 
 # Questions
 Any questions about the group or this repository feel free to contact @jhollist 
