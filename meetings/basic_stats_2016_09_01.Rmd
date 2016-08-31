@@ -1,0 +1,47 @@
+---
+title: "AED R and Friends: Basic Statistics with R"
+output: html_notebook
+---
+# Introduction
+This notebook will cover calculating basic statistics with R, conducting statistical tests, and building simple linear models.  We will use the 2007 NLA data for the examples and show steps from getting data, to cleaning data, to analysis and statistics.
+
+## Get Data
+First step in any project will be getting the data read into R.  For this lesson we are using the 2007 National Lakes Assessment data, which ,luckily, can be accessed directly from a URL.  
+
+```{r get_nla_data}
+# URL for 2007 NLA water quality data
+nla_wq_url <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_chemical_conditionestimates_20091123.csv"
+
+nla_secchi_url <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_secchi_20091008.csv"
+
+# Read into an R data.frame with read.csv
+nla_wq <- read.csv(nla_url, stringsAsFactors = FALSE)
+nla_secchi <- read.csv(nla_secchi_url, stringsAsFactor = FALSE)
+```
+
+
+# Clean Data
+So this is a bit bigger, let's do some clean up on this dataset, using `dplyr`.  We want to select out a few columns, filter out the data that we want and get our data.frame ready for futher analysis.
+
+```{r clean_nla_data, message=FALSE, warning=FALSE}
+#Load dplyr into current session
+library(dplyr)
+
+#Clean up NLA Water quality
+nla_wq_cln <- nla_wq %>%
+  filter(VISIT_NO == 1,
+         SITE_TYPE == "PROB_Lake") %>%
+  select(SITE_ID,ST,EPA_REG,RT_NLA,PTL,NTL,TURB,CHLA)
+
+#Clean up NLA Secchi
+nla_secchi_cln <- nla_secchi %>%
+  filter(VISIT_NO == 1) %>%
+  select(SITE_ID, SECMEAN)
+
+#Join the two together based on SITE_ID
+nla <- left_join(x = nla_wq_cln, y = nla_secchi_cln, by = "SITE_ID") %>%
+  filter(complete.cases(NTL,PTL,TURB,CHLA,SECMEAN))
+tbl_df(nla)
+```
+
+
