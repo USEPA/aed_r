@@ -16,7 +16,7 @@ nla_wq_url <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_chemic
 nla_secchi_url <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_secchi_20091008.csv"
 
 # Read into an R data.frame with read.csv
-nla_wq <- read.csv(nla_url, stringsAsFactors = FALSE)
+nla_wq <- read.csv(nla_wq_url, stringsAsFactors = FALSE)
 nla_secchi <- read.csv(nla_secchi_url, stringsAsFactor = FALSE)
 ```
 
