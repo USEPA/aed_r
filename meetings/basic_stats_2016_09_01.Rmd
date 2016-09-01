@@ -22,7 +22,7 @@ nla_secchi <- read.csv(nla_secchi_url, stringsAsFactor = FALSE)
 
 
 ## Clean Data
-So this is a bit bigger, let's do some clean up on this dataset, using `dplyr`.  We want to select out a few columns, filter out the data that we want and get our data.frame ready for futher analysis.
+So this dataset is a bit bigger than we probably want, let's do some clean up using `dplyr`.  We want to select out a few columns, filter out the data that we want and get our data.frame ready for futher analysis.
 
 ```{r clean_nla_data, message=FALSE, warning=FALSE}
 #Load dplyr into current session
@@ -32,7 +32,7 @@ library(dplyr)
 nla_wq_cln <- nla_wq %>%
   filter(VISIT_NO == 1,
          SITE_TYPE == "PROB_Lake") %>%
-  select(SITE_ID,ST,EPA_REG,RT_NLA,PTL,NTL,TURB,CHLA)
+  select(SITE_ID,ST,EPA_REG,RT_NLA,LAKE_ORIGIN,PTL,NTL,TURB,CHLA)
 
 #Clean up NLA Secchi
 nla_secchi_cln <- nla_secchi %>%
@@ -85,7 +85,7 @@ mean(x, na.rm = TRUE) #Returns mean of 37, 22, 41, and 19
 
 While visualization isn't the point of this lesson, some things are useful to do at this stage of analysis.  In particular is looking at distributions and some basic scatterplots.
 
-We can look at histograms:
+We can look at histograms and density:
 
 ```{r histogram_density, message=FALSE, warning=FALSE}
 #A single histogram using base
@@ -94,26 +94,92 @@ hist(nla$NTL)
 hist(log1p(nla$NTL)) #log1p adds one to deal with zeros
 #Density plot
 plot(density(log1p(nla$NTL)))
+```
 
+
+And boxplots:
+
+```{r boxplots, message=FALSE, warning=FALSE}
+#Simple boxplots
+boxplot(nla$CHLA)
+boxplot(log1p(nla$CHLA))
+
+#Boxplots per group
+boxplot(log1p(nla$CHLA)~nla$EPA_REG)
+```
+
+And scatterplots:
+
+```{r scatterplots, message=FALSE, warning=FALSE}
+#A single scatterplot
+plot(log1p(nla$PTL),log1p(nla$CHLA))
+#A matrix of scatterplot
+plot(log1p(nla[,6:10]))
+```
+
+
+Lastly, it might be nice to look at these on a per variable basis or on some grouping variable. First we could look at the density of each measured variable. This requires some manipulation of the data which will allow us to use facets in ggplot to create a density distribution for each of the variables.
+
+```{r fancy_density, message=FALSE, warning=FALSE}
 #Getting fancy with tidyr and ggplot2 to visualize all variables
 library(tidyr)
 library(ggplot2)
-nla_gather <- gather(nla,parameter,value,5:9)
+nla_gather <- gather(nla,parameter,value,6:10)
 ggplot(nla_gather,aes(x=log1p(value))) +
   geom_density() +
   facet_wrap("parameter") +
   labs(x="log1p of measured value")
 ```
 
-And boxplots:
+Next we could look at a scatterplot matrix of the relationship between phosphorus and chlorophyl by each EPA Region.  No need to re-do the shape of the data frame for this one.
 
-```{r boxplots, message=FALSE, warning=FALSE}
-
+```{r fancy_matrix, message=FALSE, warning=FALSE}
+ggplot(nla, aes(x=log1p(PTL),y=log1p(NTL))) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("EPA_REG")
 ```
 
-And scatterplots:
+## Some tests: t-test and ANOVA
+There are way more tests than we can show examples for.  For today we will show two very common and straightforward tests.  The t-test and an ANOVA.
 
-```{r scatterplots, message=FALSE, warning=FALSE}
+### t-test
+First we will look at the t-test to test and see if `LAKE_ORIGIN` shows a difference in `SECMEAN`.  In other words can we expect a difference in clarity due to whether a lake is man-made or natural.  This is a two-tailed test. There are two approaches for this 1) using the formula notation if your dataset is in a "long" format or 2) using two separate vectors if your dataset is in a "wide" format.
 
+```{r t-test, message=FALSE, warning=FALSE}
+#Long Format - original format for LAKE_ORIGIN and SECMEAN
+t.test(nla$SECMEAN ~ nla$LAKE_ORIGIN)
+
+#Wide Format - need to do some work to get there - tidyr is handy!
+wide_nla <- spread(nla,LAKE_ORIGIN,SECMEAN)
+names(wide_nla)[9:10]<-c("man_made", "natural")
+t.test(wide_nla$man_made, wide_nla$natural)
 ```
 
+Same results, two different ways to approach.  Take a look at the help (e.g. `?t.test`) for more details on other types of t-tests (e.g. paired, one-tailed, etc.)
+
+### ANOVA
+ANOVA can get involved quickly and I haven't done them since my last stats class, so I'm not the best to talk about these, but the very basics require fitting a model and wrapping that ins `aov` function.  In the [Getting More Help section](#getting-more-help) I provide a link that would be a good first start for you ANOVA junkies.  For todays lesson though, lets look at the simple case of a one-vay analysis of variance and check if reference class results in differences in our chlorophyll
+
+```{r simple_anova, message=FALSE, warning=FALSE}
+# A quick visual of this:
+boxplot(log1p(nla$CHLA)~nla$RT_NLA)
+
+# One way analysis of variance
+nla_anova <- aov(log1p(CHLA)~RT_NLA, data=nla)
+nla_anova #Terms
+summary(nla_anova) #The table
+anova(nla_anova) #The table with a bit more
+```
+
+
+## Correlations and Linear modeling
+The last bit of basic stats we will cover is going to be linear relationships.
+
+### Correlations
+Let's first take a look at correlations.  These can be done with 
+
+### Linear models
+
+## Getting More Help
+One nice site that covers basic stats in R is [Quick R: Basic Statistics](http://www.statmethods.net/stats/index.html).  There are others, but that is a good first stop.
