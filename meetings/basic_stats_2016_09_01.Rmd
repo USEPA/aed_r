@@ -2,13 +2,14 @@
 title: "AED R and Friends: Basic Statistics with R"
 output: html_notebook
 ---
+
 # Introduction
 This notebook will cover calculating basic statistics with R, conducting statistical tests, and building simple linear models.  We will use the 2007 NLA data for the examples and show steps from getting data, to cleaning data, to analysis and statistics.
 
 ## Get Data
 First step in any project will be getting the data read into R.  For this lesson we are using the 2007 National Lakes Assessment data, which ,luckily, can be accessed directly from a URL.  
 
-```{r get_nla_data}
+```{r get_nla_data, message=FALSE, warning=FALSE}
 # URL for 2007 NLA water quality data
 nla_wq_url <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_chemical_conditionestimates_20091123.csv"
 
@@ -20,7 +21,7 @@ nla_secchi <- read.csv(nla_secchi_url, stringsAsFactor = FALSE)
 ```
 
 
-# Clean Data
+## Clean Data
 So this is a bit bigger, let's do some clean up on this dataset, using `dplyr`.  We want to select out a few columns, filter out the data that we want and get our data.frame ready for futher analysis.
 
 ```{r clean_nla_data, message=FALSE, warning=FALSE}
@@ -38,10 +39,81 @@ nla_secchi_cln <- nla_secchi %>%
   filter(VISIT_NO == 1) %>%
   select(SITE_ID, SECMEAN)
 
-#Join the two together based on SITE_ID
+#Join the two together based on SITE_ID and the finally filter out NA's
 nla <- left_join(x = nla_wq_cln, y = nla_secchi_cln, by = "SITE_ID") %>%
   filter(complete.cases(NTL,PTL,TURB,CHLA,SECMEAN))
 tbl_df(nla)
 ```
 
+So now we have a dataset ready for analysis.
+
+## Analyze Data
+
+### Basic Stats
+First step in analyzing a dataset like this is going to be to dig through some basic statistics as well as some basic plots.  
+
+We can get a summary of the full data frame:
+
+```{r summary, message=FALSE, warning=FALSE}
+#Get a summary of the data frame
+summary(nla)
+```
+
+Or, we can pick and choose what stats we want.  For instance:
+
+```{r individual_stats, message=FALSE, warning=FALSE}
+#Stats for Total Nitrogen
+mean(nla$NTL)
+median(nla$NTL)
+min(nla$NTL)
+max(nla$NTL)
+sd(nla$NTL)
+IQR(nla$NTL)
+range(nla$NTL)
+```
+
+In these cases we took care of our NA values during our data clean up, but there may be reasons you would not want to do that.  If you retained NA values, you would need to think about how to handle those.  One way is to remove it from the calculation of the statistics using the `na.rm = TRUE` argument.  For instance:
+
+```{r na_rm, message=FALSE, warning=FALSE}
+#An example with NA's
+x <- c(37,22,NA,41,19)
+mean(x) #Returns NA
+mean(x, na.rm = TRUE) #Returns mean of 37, 22, 41, and 19
+```
+
+### Some quick useful viz
+
+While visualization isn't the point of this lesson, some things are useful to do at this stage of analysis.  In particular is looking at distributions and some basic scatterplots.
+
+We can look at histograms:
+
+```{r histogram_density, message=FALSE, warning=FALSE}
+#A single histogram using base
+hist(nla$NTL)
+#Log transform it
+hist(log1p(nla$NTL)) #log1p adds one to deal with zeros
+#Density plot
+plot(density(log1p(nla$NTL)))
+
+#Getting fancy with tidyr and ggplot2 to visualize all variables
+library(tidyr)
+library(ggplot2)
+nla_gather <- gather(nla,parameter,value,5:9)
+ggplot(nla_gather,aes(x=log1p(value))) +
+  geom_density() +
+  facet_wrap("parameter") +
+  labs(x="log1p of measured value")
+```
+
+And boxplots:
+
+```{r boxplots, message=FALSE, warning=FALSE}
+
+```
+
+And scatterplots:
+
+```{r scatterplots, message=FALSE, warning=FALSE}
+
+```
 
