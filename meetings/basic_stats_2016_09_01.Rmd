@@ -179,9 +179,44 @@ anova(nla_anova) #The table with a bit more
 The last bit of basic stats we will cover is going to be linear relationships.
 
 ### Correlations
-Let's first take a look at correlations.  These can be done with 
+Let's first take a look at correlations.  These can be done with `cor()`.
+
+```{r cor, message=FALSE, warning=FALSE}
+#For a pair
+cor(log1p(nla$PTL),log1p(nla$NTL))
+#For a correlation matrix
+cor(log1p(nla[,6:10]))
+#Spearman Rank Correlations
+cor(log1p(nla[,6:10]),method = "spearman")
+```
+
+You can also test for differences using:
+
+```{r cor_test, message=FALSE,warning=FALSE}
+cor.test(log1p(nla$PTL),log1p(nla$NTL))
+```
 
 ### Linear models
+Basic linear models in R can be built with the `lm()` function.  If you aren't buiding stadard least squares regressin models, (e.g. logistic) or aren't doing linear models then you will need to look elsewhere (e.g `glm()`, or `nls()`).  For today our focus is going to be on simple linear models.  Let's look at our ability to model chlorophyll, given the other variables we have.
+
+```{r}
+# The simplest case
+chla_tp <- lm(log1p(CHLA) ~ log1p(PTL), data=nla) #Creates the model
+summary(chla_tp) #Basic Summary
+names(chla_tp) #The bits
+chla_tp$coefficients #My preference
+coef(chla_tp) #Same thing, but from a function
+resid(chla_tp) # The resdiuals
+```
+
+We can also do multiple linear regression.
+
+```{r multiple, warning=FALSE, message=FALSE}
+chla_tp_tn_turb <- lm(log1p(CHLA) ~ log1p(PTL) + log1p(NTL) + log1p(TURB), data = nla)
+summary(chla_tp_tn_turb)
+```
+
+There's a lot more we can do with linear models including dummy variables (character or factors will work), interactions, etc.  That's a bit more than we want to get into.  Again the link below is a good place to start for more info.
 
 ## Getting More Help
 One nice site that covers basic stats in R is [Quick R: Basic Statistics](http://www.statmethods.net/stats/index.html).  There are others, but that is a good first stop.
