@@ -121,14 +121,16 @@ plot(log1p(nla[,6:10]))
 Lastly, it might be nice to look at these on a per variable basis or on some grouping variable. First we could look at the density of each measured variable. This requires some manipulation of the data which will allow us to use facets in ggplot to create a density distribution for each of the variables.
 
 ```{r fancy_density, message=FALSE, warning=FALSE}
-#Getting fancy with tidyr and ggplot2 to visualize all variables
+#Getting super fancy with tidyr, plotly, and ggplot2 to visualize all variables
 library(tidyr)
 library(ggplot2)
+library(plotly)
 nla_gather <- gather(nla,parameter,value,6:10)
-ggplot(nla_gather,aes(x=log1p(value))) +
+dens_gg <-ggplot(nla_gather,aes(x=log1p(value))) +
   geom_density() +
   facet_wrap("parameter") +
   labs(x="log1p of measured value")
+ggplotly(dens_gg)
 ```
 
 Next we could look at a scatterplot matrix of the relationship between phosphorus and chlorophyl by each EPA Region.  No need to re-do the shape of the data frame for this one.
