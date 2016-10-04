@@ -112,11 +112,11 @@ So, now that we have the base packages installed and loaded we can work on getti
 - [Exercise 2.2](#exercise-22)
 
 ## Get the example data
-For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/USEPA/intro_gis_with_r/blob/master/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.
+For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/USEPA/aed_r/blob/master/meetings/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.
 
 ```{r download_zip,eval=FALSE}
 library(httr)
-url <- "https://github.com/USEPA/intro_gis_with_r/blob/master/data.zip?raw=true"
+url <- "https://github.com/USEPA/aed_r/blob/master/meetings/data.zip?raw=true"
 GET(url,write_disk("data.zip",overwrite = TRUE))
 ```
 
