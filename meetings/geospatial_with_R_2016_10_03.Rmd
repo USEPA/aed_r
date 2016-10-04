@@ -3,7 +3,7 @@ title: "AED R and Friends: Geospatial/GIS in R"
 output: 
   html_notebook:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
