@@ -15,8 +15,11 @@ opts_chunk$set(tidy=T)
 opts_chunk$set(root.dir = "/data/projects/aed_r/meetings")
 set.seed(1)
 ```
- 
-# Data
+
+# Basics of running random forests 
+There are multiple ways to run random forests, we will look at three different packages for this: `randomForest` (the classic), `party` (new and improved), and `ranger` (the souped up classic).
+
+## Data
 Let's play with the NLA 2012 data!
 
 ```{r}
@@ -31,12 +34,14 @@ nla12<-full_join(read.csv(sites,stringsAsFactors = FALSE),
   filter(VISIT_NO == 1) %>%
   select(SITE_ID, AREA_HA,LAT_DD83,LON_DD83,PERIM_KM,ELEVATION,TURB_RESULT,DOC_RESULT,
          NTL_RESULT,PTL_RESULT,CHLX_RESULT,SECCHI)
-nla12_cc <- nla12[complete.cases(nla12[,2:12]),]
-names(nla12_cc) <- tolower(names(nla12_cc)) #Becuase I hate caps
+names(nla12) <- tolower(names(nla12)) #Becuase I hate caps
+nla12_cc <- nla12[complete.cases(nla12[,-1]),] %>%
+  mutate(ntl_result = log1p(ntl_result), ptl_result = log1p(ptl_result), 
+         chlx_result =  log1p(chlx_result))
 tbl_df(nla12_cc)
 ```
 
-# randomForest
+## randomForest
 
 First, set our seed so that results come out the same:
 
@@ -47,27 +52,69 @@ set.seed(1)
 
 ```{r}
 library(randomForest)
-nla_rf <- randomForest(chlx_result ~ ., data = nla12_cc[,-1],ntree=1000,mtry=5)
-system.time(randomForest(chlx_result ~ ., data = nla12_cc[,-1],ntree=1000,mtry=5))
+nla_rf <- randomForest(chlx_result ~ ., data = nla12_cc[,-1], ntree = 1000 , 
+                       mtry = 5, importance = T)
+system.time(randomForest(chlx_result ~ ., data = nla12_cc[,-1],ntree = 1000,
+                         mtry = 5, importance = T))
 nla_rf
+plot(nla_rf)
+varImpPlot(nla_rf)
+caret::varImp(nla_rf)
+
 ```
 
-# party
+## party
 ```{r}
 library(party)
 nla_party <- cforest(chlx_result ~ ., data = nla12_cc[,-1], 
                      control = cforest_unbiased(ntree=1000))
 system.time(cforest(chlx_result ~ ., data = nla12_cc[,-1], 
                      control = cforest_unbiased(ntree=1000)))
-nla_party
+caret::cforestStats(nla_party)
+
 ```
 
-# ranger
+## ranger
 ```{r}
 library(ranger)
-nla_ranger <- ranger(chlx_result ~ ., data = nla12_cc[,-1],num.trees=1000,mtry=5)
-system.time(ranger(chlx_result ~ ., data = nla12_cc[,-1],num.trees=1000,mtry=5))
+nla_ranger <- ranger(chlx_result ~ ., data = nla12_cc[,-1], num.trees = 1000, 
+                     mtry = 5, importance = "impurity")
+system.time(ranger(chlx_result ~ ., data = nla12_cc[,-1], num.trees = 1000, mtry = 5, 
+                   importance = "impurity"))
 nla_ranger
+ranger::importance(nla_ranger)
 ```
 
+# Compare predictions from 2012 models on 2007 data
+My understanding of random forests is that separate test and training datasets are not needed to validate the model.  The resampling that occurs takes care of this and is another argument in favor of other methods that don't have this resampling and "out of bag" error built in.  That being said, I can see situations where it would be nice to see how well a model predicts an additional, independent dataset.  We (finally!!!) can do this with the NLA 2012 and 2007 data.
 
+We will need to build our test dataset and since the `predict()` function is looking for datasets with the same strucutre we will make sure that happens.
+
+## Build test datasets from 2007
+
+```{r}
+wc <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_chemical_conditionestimates_20091123.csv"
+sites <- "https://www.epa.gov/sites/production/files/2014-01/nla2007_sampledlakeinformation_20091113.csv"
+secchi <- "https://www.epa.gov/sites/production/files/2014-10/nla2007_secchi_20091008.csv"
+nla07 <- full_join(read.csv(wc, stringsAsFactors = TRUE),
+                   read.csv(sites, stringsAsFactors = TRUE) , 
+                   by = c("SITE_ID", "VISIT_NO")) %>%
+  full_join(read.csv(secchi, stringsAsFactors = TRUE), 
+            by = c("SITE_ID", "VISIT_NO")) %>%
+  filter(VISIT_NO == 1) %>%
+  select(site_id = SITE_ID, area_ha = AREA_HA, lat_dd83 = LAT_DD.x, 
+         lon_dd83 = LON_DD.x, perim_km = LAKEPERIM, elevation = ELEV_PT, 
+         turb_result =  TURB, doc_result = DOC, ntl_result = NTL, 
+         ptl_result = PTL, chlx_result = CHLA, secchi = SECMEAN)
+nla07_cc <- nla07[complete.cases(nla07[,-1]),] %>%
+  mutate(ntl_result = log1p(ntl_result), ptl_result = log1p(ptl_result), 
+         chlx_result =  log1p(chlx_result))
+tbl_df(nla07_cc)
+```
+
+## Predict and compare
+
+```{r}
+nla07_chla_predict <- predict(object = nla_rf, newdata = nla07_cc)
+plot(nla07_chla_predict,nla07_cc$chlx_result)
+```
