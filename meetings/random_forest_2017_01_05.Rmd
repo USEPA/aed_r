@@ -1,0 +1,73 @@
+---
+title: "AED R and Friends: Working with databases using dplyr"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+options(repos="http://cran.rstudio.com/")
+pkgs <- c("dplyr","tidyr","knitr","randomForest","caret","ranger",
+          "party")
+x<-lapply(pkgs, library, character.only = TRUE)
+opts_chunk$set(tidy=T)
+opts_chunk$set(root.dir = "/data/projects/aed_r/meetings")
+set.seed(1)
+```
+ 
+# Data
+Let's play with the NLA 2012 data!
+
+```{r}
+chla <- "https://www.epa.gov/sites/production/files/2016-11/nla2012_chla_wide.csv"
+wq <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_waterchem_wide.csv"
+sites <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_wide_siteinfo_08232016.csv"
+secchi <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_secchi_08232016.csv"
+nla12<-full_join(read.csv(sites,stringsAsFactors = FALSE),
+                 read.csv(wq,stringsAsFactors = FALSE)) %>%
+  full_join(read.csv(chla,stringsAsFactors = FALSE)) %>%
+  full_join(read.csv(secchi,stringsAsFactors = FALSE)) %>%
+  filter(VISIT_NO == 1) %>%
+  select(SITE_ID, AREA_HA,LAT_DD83,LON_DD83,PERIM_KM,ELEVATION,TURB_RESULT,DOC_RESULT,
+         NTL_RESULT,PTL_RESULT,CHLX_RESULT,SECCHI)
+nla12_cc <- nla12[complete.cases(nla12[,2:12]),]
+names(nla12_cc) <- tolower(names(nla12_cc)) #Becuase I hate caps
+tbl_df(nla12_cc)
+```
+
+# randomForest
+
+First, set our seed so that results come out the same:
+
+```{r}
+# Set Seed
+set.seed(1)
+```
+
+```{r}
+library(randomForest)
+nla_rf <- randomForest(chlx_result ~ ., data = nla12_cc[,-1],ntree=1000,mtry=5)
+system.time(randomForest(chlx_result ~ ., data = nla12_cc[,-1],ntree=1000,mtry=5))
+nla_rf
+```
+
+# party
+```{r}
+library(party)
+nla_party <- cforest(chlx_result ~ ., data = nla12_cc[,-1], 
+                     control = cforest_unbiased(ntree=1000))
+system.time(cforest(chlx_result ~ ., data = nla12_cc[,-1], 
+                     control = cforest_unbiased(ntree=1000)))
+nla_party
+```
+
+# ranger
+```{r}
+library(ranger)
+nla_ranger <- ranger(chlx_result ~ ., data = nla12_cc[,-1],num.trees=1000,mtry=5)
+system.time(ranger(chlx_result ~ ., data = nla12_cc[,-1],num.trees=1000,mtry=5))
+nla_ranger
+```
+
+

@@ -1,10 +1,5 @@
 ---
 title: "AED R and Friends: Manipulating data with dplyr and tidyr"
-output: 
-  html_notebook:
-    toc: true
-    toc_depth: 3
-    toc_float: true
 ---
 
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
@@ -44,7 +39,7 @@ The `dplyr` package is first and foremost a package to help faciliatate data man
 Before we move on, we need some data.  Once again, I am going to rely on the 2007 National Lakes Assessment Data:
 
 ```{r}
-sites <- read.csv("http://www.epa.gov/sites/production/files/2014-01/nla2007_sampledlakeinformation_20091113.csv")
+sites <- read.csv("https://www.epa.gov/sites/production/files/2014-01/nla2007_sampledlakeinformation_20091113.csv")
 ```
 
 Let's look at the columns for each of these
@@ -106,7 +101,7 @@ Renaming columns is easy
 
 ```{r}
 sites_sel %>%
-  rename(Ecoregion = WSA_ECO9, MaxDepth = DEPTHMAX)%>%
+  rename(ecoregion = WSA_ECO9, max_depth = DEPTHMAX)%>%
   head()
 ```
 
@@ -204,7 +199,7 @@ Will let you explore the others on your own.
 We will need to add another dataset and filter our sites some to show how the different joins work.  
 
 ```{r}
-wq <- read.csv("http://www.epa.gov/sites/production/files/2014-10/nla2007_chemical_conditionestimates_20091123.csv")
+wq <- read.csv("https://www.epa.gov/sites/production/files/2014-10/nla2007_chemical_conditionestimates_20091123.csv")
 wq_sel<-wq %>%
   select(SITE_ID,VISIT_NO,CHLA,NTL,PTL,TURB)
 head(wq_sel)
