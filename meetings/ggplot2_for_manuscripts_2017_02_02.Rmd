@@ -1,0 +1,53 @@
+---
+title: "AED R and Friends: `ggplot2` figures for your manuscript"
+output: 
+  html_notebook:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+options(repos="http://cran.rstudio.com/")
+pkgs <- c("dplyr","ggplot2","plotly")
+x<-lapply(pkgs, library, character.only = TRUE)
+opts_chunk$set(tidy=T)
+```
+ 
+# Making the figures
+There are a gazillion different ways to visualize the same data.  For this short workshop we will use a single dataset and create two separate plots, a scatterplot and a bar chart, that show the same data.  From this we should learn how to create these plots with `ggplot2`, learn that datasets need to be manipulated for different visualizations, and learn how to save the plots to files for inclusion into a manuscript.  If there is time at the end we will show some examples of interactive figures and animations using `ggplot2`.
+
+## The data: NLA 2012
+Assuming we still have access to it, we will use the NLA 2012 water quality data for these exercises.  Specifically we will be interested in total nitrogen, total phosphorus, and ecoregion.  First, let's load up our packages:
+
+```{r packages}
+library(dplyr) # For some basic data massaging
+library(ggplot2) # For the plots
+library(plotly) # For interacive plots with plotly
+library(gganimate) # For animations. Not yet on CRAN, so need devtools
+```
+
+Next, to get the data:
+
+```{r data}
+nla12_wq_url <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_waterchem_wide.csv"
+nla12_site_url <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_wide_siteinfo_08232016.csv"
+
+# Read, join, filter, select data
+nla12_wq <- read.csv(nla12_wq_url, stringsAsFactors = FALSE) 
+nla12_site <- read.csv(nla12_site_url, stringsAsFactors = FALSE)
+nla12 <- full_join(nla12_wq,nla12_site) %>%
+  filter(VISIT_NO == 1) %>%
+  select(SITE_ID, FW_ECO9, NTL_RESULT, PTL_RESULT)
+tbl_df(nla12)  
+```
+
+So now we have total nutrients and a categorical representing the ecoregion for the data.  Let's start plotting this out.
+
+## Scatterplot
+
+## Bar chart with error bars
+
+# Saving the figures
+
+# Other stuff: interactive plots and animation
