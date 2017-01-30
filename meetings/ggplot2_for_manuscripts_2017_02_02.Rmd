@@ -47,6 +47,7 @@ tbl_df(nla12)
 So now we have total nutrients and a categorical representing the ecoregion for the data.  Let's start plotting this out.
 
 ## Bar chart with error bars
+Add cookbook link
 
 ```{r barchart_data}
 nla12_bar_mean <- nla12 %>%
