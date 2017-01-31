@@ -1,0 +1,80 @@
+---
+title: 'AED R and Friends: `ggplot2` figures for your manuscript'
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+library(knitr)
+options(repos="http://cran.rstudio.com/")
+pkgs <- c("dplyr","ggplot2","plotly")
+x<-lapply(pkgs, library, character.only = TRUE)
+opts_chunk$set(tidy=T, root.dir = "meetings")
+```
+ 
+# Making the figures
+There are a gazillion different ways to visualize the same data.  For this short workshop we will use two datasets and create two separate plots, a bar chart with error bars and a depth profile plot.  From this we should learn how to create these plots with `ggplot2`, learn that datasets need to be manipulated for different visualizations, and learn how to save the plots to files for inclusion into a manuscript.  If there is time at the end we will show some examples of interactive figures and animations using `ggplot2`.
+
+## Data for bar chart: NLA 2012
+Assuming we still have access to it, we will use the NLA 2012 water quality data for the bar chart with error bars.  Specifically we will be interested in total nitrogen, total phosphorus, and ecoregion.  First, let's load up our packages:
+
+```{r packages}
+library(dplyr) # For some basic data massaging
+library(tidyr) # Also for some basic data massaging
+library(ggplot2) # For the plots
+library(plotly) # For interacive plots with plotly
+library(gganimate) # For animations. Not yet on CRAN, so need devtools
+```
+
+Next, to get the data:
+
+```{r data}
+nla12_wq_url <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_waterchem_wide.csv"
+nla12_site_url <- "https://www.epa.gov/sites/production/files/2016-12/nla2012_wide_siteinfo_08232016.csv"
+
+# Read, join, filter, select data
+nla12_wq <- read.csv(nla12_wq_url, stringsAsFactors = FALSE) 
+nla12_site <- read.csv(nla12_site_url, stringsAsFactors = FALSE)
+nla12 <- full_join(nla12_wq,nla12_site) %>%
+  filter(VISIT_NO == 1) %>%
+  select(SITE_ID, FW_ECO9, NTL_RESULT, PTL_RESULT) %>%
+  na.omit()
+tbl_df(nla12)  
+```
+
+So now we have total nutrients and a categorical representing the ecoregion for the data.  Let's start plotting this out.
+
+## Bar chart with error bars
+Add cookbook link
+
+```{r barchart_data}
+nla12_bar_mean <- nla12 %>%
+  group_by(FW_ECO9) %>%
+  summarize(nitrogen = mean(log10(NTL_RESULT)),
+            phosphorus = mean(log10(PTL_RESULT))) %>%
+  gather("variable", "mean", 2:3)
+
+nla12_bar_se <- nla12 %>%
+  group_by(FW_ECO9) %>%
+  summarize(nitrogen = sd(log10(NTL_RESULT))/sqrt(length(NTL_RESULT)),
+            phosphorus = sd(log10(PTL_RESULT))/sqrt(length(PTL_RESULT))) %>%
+  gather("variable", "std_error", 2:3)
+
+nla12_bar_data <- full_join(nla12_bar_mean, nla12_bar_se)
+nla12_bar_data
+```
+
+```{r barchart}
+nla12_bar <- ggplot(nla12_bar_data,aes(x = FW_ECO9, y = mean, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=mean-std_error, ymax=mean+std_error),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9))
+
+nla12_bar
+```
+# Saving the figures
+
+# Other stuff: interactive plots and animation
