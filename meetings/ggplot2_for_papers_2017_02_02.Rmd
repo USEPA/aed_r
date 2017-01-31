@@ -1,7 +1,7 @@
 ---
-title: "AED R and Friends: `ggplot2` figures for your manuscript"
-output: 
-  html_notebook:
+title: 'AED R and Friends: `ggplot2` figures for your manuscript'
+output:
+  html_document:
     toc: yes
     toc_float: yes
 ---
