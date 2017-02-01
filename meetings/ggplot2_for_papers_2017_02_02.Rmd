@@ -52,14 +52,14 @@ Add cookbook link
 ```{r barchart_data}
 nla12_bar_mean <- nla12 %>%
   group_by(FW_ECO9) %>%
-  summarize(nitrogen = mean(log10(NTL_RESULT)),
-            phosphorus = mean(log10(PTL_RESULT))) %>%
+  summarize(nitrogen = mean(log1p(NTL_RESULT)),
+            phosphorus = mean(log1p(PTL_RESULT))) %>%
   gather("variable", "mean", 2:3)
 
 nla12_bar_se <- nla12 %>%
   group_by(FW_ECO9) %>%
-  summarize(nitrogen = sd(log10(NTL_RESULT))/sqrt(length(NTL_RESULT)),
-            phosphorus = sd(log10(PTL_RESULT))/sqrt(length(PTL_RESULT))) %>%
+  summarize(nitrogen = sd(log1p(NTL_RESULT))/sqrt(length(NTL_RESULT)),
+            phosphorus = sd(log1p(PTL_RESULT))/sqrt(length(PTL_RESULT))) %>%
   gather("variable", "std_error", 2:3)
 
 nla12_bar_data <- full_join(nla12_bar_mean, nla12_bar_se)
@@ -75,6 +75,36 @@ nla12_bar <- ggplot(nla12_bar_data,aes(x = FW_ECO9, y = mean, fill = variable)) 
 
 nla12_bar
 ```
+
+### Re-order x-axis
+
+### Change colors of bars
+
+### Move beyond the default theme
+
+## Profile plot
+
+
 # Saving the figures
+Once you have the details of your figure, figured (he, he) out you need to move it from the screen and into your manuscript.  This requires saving the output to a file.  The `ggplot2` package comes with a function to facilitate this, `ggsave()`.  To output a ggplot2 object to a high resolution tiff:
+
+```{r ggsave}
+ggsave(filename = "nla_bar_chart.tiff",
+       plot = nla12_bar,
+       path = "meetings",
+       width = 8,
+       height = 4,
+       units = "in", 
+       dpi = 300)
+```
+
+This should get you pretty close to providing the figures required by the journal you are submitting too.  If there are additional things you need to do your figure you can either edit the file directly in an image processing program (e.g. gimp or irfanview) or you can manipulate the file in R with the `magick` package, essentially an R client for ImageMagick.  Using `magick` is a bit beyond the scope of what we want to do today, but I will show a quick example of something I had to do for a paper recently: remlibmagick++-devove white space around borders of the image.  We can do with this using the auto crop functionality in `magick`.
+
+```{r autocrop}
+library(magick)
+nla_fig <- image_read("meetings/nla_bar_chart.tiff")
+nla_fig <- image_trim(nla_fig)
+image_write(nla_fig, "meetings/nla_bar_chart_trim.tiff" )
+```
 
 # Other stuff: interactive plots and animation
