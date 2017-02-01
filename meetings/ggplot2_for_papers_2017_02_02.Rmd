@@ -47,7 +47,18 @@ tbl_df(nla12)
 So now we have total nutrients and a categorical representing the ecoregion for the data.  Let's start plotting this out.
 
 ## Bar chart with error bars
-Add cookbook link
+
+(These instructions inspired by the [R Graphics Cookbook](http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/#bar-graphs))
+
+Prior to jumping into coding any figure I like to think a bit about what I want to show and will actually sketch that out on paper.  Doing this also forces you to start thinking about what data you need to create that figure. In the case of the bar chart with error bars at a minimum we will need some mean value to plot and some representation of error for the error bars.  Another common thing to do is plot this for multiple categories and for multiple values.  
+
+For this example, we will be interested in looking at Nitrogen and Phosphorus concentrations across ecoregions.  Thus we will need to summarize the per lake data on an ecoregional basis and get the mean and standard error for each nutrient within each ecoregion.   Also, many of the `ggplot2` functions will easily create seperate plots if a catergorical factor is supplied.  We will keep this in mind becuase we want different bars for each of the variables.
+
+Given this we need a data frame that looks like:
+
+|Ecoregion|Nutrient|Mean|Standard Error|
+|---------|--------|----|--------------|
+
 
 ```{r barchart_data}
 nla12_bar_mean <- nla12 %>%
@@ -66,6 +77,8 @@ nla12_bar_data <- full_join(nla12_bar_mean, nla12_bar_se)
 nla12_bar_data
 ```
 
+Now that was easy!  I am being purposely glib, becuase the part that we just did is really about 90% of the effort.  In reality this usually takes me a couple of iterations of getting things wrong. Now we can use this to build out our plot.
+
 ```{r barchart}
 nla12_bar <- ggplot(nla12_bar_data,aes(x = FW_ECO9, y = mean, fill = variable)) +
   geom_bar(stat = "identity", position = position_dodge()) +
@@ -75,6 +88,7 @@ nla12_bar <- ggplot(nla12_bar_data,aes(x = FW_ECO9, y = mean, fill = variable)) 
 
 nla12_bar
 ```
+
 # Saving the figures
 
 # Other stuff: interactive plots and animation
