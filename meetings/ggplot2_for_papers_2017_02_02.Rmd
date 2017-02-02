@@ -216,11 +216,11 @@ image_write(nla_fig, "nla_bar_chart_trim.tiff" )
 
 The original tiff:
 
-![tiff1](nla_bar_chart.tiff)
+![](nla_bar_chart.tiff)
 
 The trimmed version:
 
-![tiff2](nla_bar_chart_trim.tiff)
+![](nla_bar_chart_trim.tiff)
 
 ### Exercise 1. Make a bar chart
 
@@ -252,4 +252,28 @@ nla12_bar_data_turb <- full_join(nla12_bar_mean_turb, nla12_bar_se_turb)
 
 A common type of plot is a depth profile where some measurement is recorded along a depth.  These are commonly done in limnology and oceanography, but also done for sediment or soil cores.  The example we will be trying to re-create is a sediment core with measurements of lead.  As an example here is a plot Warren created with Excel:
 
-![example_profile](example_profile.png)
+![](example_profile.png)
+
+The full use case that Warren and I discussed about this was to create a way to create these plots of many sites.  To me, this calls out for writing a function that creates the plots.  Prior to jumping into that, what we can do is get the data set up and the plot figured out.
+
+### Get the data
+
+Again, thanks to Warren for providing the example data which is saved as a spreadsheet. Overall the fromatting is pretty clean (which is good), but there are a few things we will need to do read it in properly.  Here's a screen grab of what the spreadsheet looks like:
+
+![](spreadsheet.jpg)
+
+Overall, not bad.  The figure won't get read in and we have an extra line at the top that we need to deal with.  
+
+```{r readxl}
+library(readxl)
+core <- readxl::read_excel("profile.xlsx",skip = 1)
+core
+```
+
+So that got us pretty close, but first thing you'll notice is that the dates are completely wacky.  We will ignore that for the time being (subject of another meeting, perhaps).
+
+### Build the plot
+
+### Reverse the y-axis
+
+### Customize the look and feel.
