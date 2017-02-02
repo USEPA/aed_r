@@ -10,7 +10,7 @@ output:
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 library(knitr)
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("dplyr","ggplot2","plotly")
+pkgs <- c("dplyr","ggplot2")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T, root.dir = "meetings")
 ```
@@ -195,10 +195,9 @@ nla12_bar +
 
 Once you have the details of your figure, figured (he, he) out you need to move it from the screen and into your manuscript.  This requires saving the output to a file.  The `ggplot2` package comes with a function to facilitate this, `ggsave()`.  To output a ggplot2 object to a high resolution tiff:
 
-```{r ggsave}
+```{r ggsave, eval = FALSE}
 ggsave(filename = "nla_bar_chart.tiff",
        plot = nla12_bar,
-       path = "meetings",
        width = 8,
        height = 4,
        units = "in", 
