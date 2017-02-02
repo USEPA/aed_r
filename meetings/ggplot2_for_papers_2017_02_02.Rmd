@@ -364,3 +364,63 @@ ggprofile <- ggplot(core,aes(x = Pb, y = TOP)) +
         axis.title = element_text(face = "bold", size = 12))
 ggprofile
 ```
+
+### What If you need a lot of them?
+
+Often you have multiple sites, and as long as you data is set up to handle it, you can kick out a lot of figures using essentially the same code.  As an example, we can create some new data
+
+```{r new_core}
+new_core <- core
+new_core$STATION <- "NEW"
+core <- rbind(core, new_core)
+```
+
+With new data, we can create a function for out plot, and wrap that in a loop.
+
+```{r function}
+prof_plot <- function(df, label){
+  x_brks <- seq(0, 100, by = 5)
+x_tick_labels <- x_brks
+x_tick_labels[0 != x_tick_labels %% 25] <- ""
+y_brks <- 25:0
+y_tick_labels <- y_brks
+y_tick_labels[0 != y_tick_labels %% 5] <- ""
+ggprofile <- ggplot(df,aes(x = Pb, y = TOP)) +
+  geom_point(color = "#5b9bd5") +
+  geom_path(color = "#5b9bd5") +
+  scale_x_continuous(position = "top", 
+                     limits = c(0,100),
+                     expand = c(0, 0), 
+                     breaks = x_brks,
+                     labels = x_tick_labels) +
+  scale_y_continuous(trans = "reverse",
+                     limits = c(25, 0),
+                     expand = c(0, 0),
+                     breaks = y_brks,
+                     labels = y_tick_labels) +
+  labs(x = expression(paste(mu,"g Pb/g dry sediment", sep="")),
+       y = "Depth (cm)") + 
+  annotate("text", x = 10, y = 2.5, label = label, fontface = "bold", size = 9) +
+  theme(text = element_text(family="Calibri"),
+        panel.background = element_blank(), 
+        panel.grid = element_blank(),
+        axis.line = element_line(size = 0.75),
+        axis.ticks = element_line(size = 0.75),
+        axis.ticks.length = unit(0.05, "in"), 
+        axis.text = element_text(face = "bold"),
+        axis.title = element_text(face = "bold", size = 12))
+return(ggprofile)
+}
+```
+
+And loop based on the station:
+
+```{r loop}
+for (i in unique(core$STATION)){
+core_sub <- core %>%
+  filter(STATION == i)
+plt <- prof_plot(core_sub,i)
+ggsave(file = paste0(i,"_profile.jpg"), plot = plt, 
+       height = 5, width = 5, dpi = 300)
+}
+```
