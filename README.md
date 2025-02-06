@@ -37,7 +37,6 @@ teach you all you need to know (and then some)!
 |README.md              |This document, provides basic information          |
 |LICENSE.md             |Creative Commons Zero Public Domain Dedication     |
 |CONTRIBUTING.md        |Lays out best practices and expecations for contributions|
-|CONDUCT.md             |Code of conduct - borrowed from Data Carpentry     |
 
 ## File naming conventions
 So that it is easier for us to find materials and keep things looking orderly, 
